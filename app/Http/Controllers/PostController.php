@@ -7,6 +7,15 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    public function showSinglePost(Post $post) {
+        
+        // find post id in database
+        // retrieve post
+        // return it to the user
+        return view('single-post', ['post' => $post]);
+
+    }
+
     public function storeNewPost(Request $request) {
         $incomingFields = $request->validate([
             'title' => 'required',
@@ -20,9 +29,9 @@ class PostController extends Controller
         // get user id
         $incomingFields['user_id'] = auth()->id(); 
 
-        Post::create($incomingFields);
+        $newPost = Post::create($incomingFields);
         
-        return "store new post";
+        return redirect("/post/{$newPost->id}")->with('success', 'New post successfully created.');
     }
 
     public function showCreateForm() {
