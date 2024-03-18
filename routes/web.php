@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -14,10 +15,11 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', [UserController::class, "showCorrectHome"]);
+Route::get('/', [UserController::class, "showCorrectHome"])->name('index');
+Route::post('/register', [UserController::class, "register"])->name('register');
+Route::post('/login', [UserController::class, "login"])->name('login');
+Route::post('/logout', [UserController::class, "logout"])->name('logout');
 
-Route::post('/register', [UserController::class, "register"]);
-
-Route::post('/login', [UserController::class, "login"]);
-
-Route::post('/logout', [UserController::class, "logout"]);
+// post related routes
+Route::get('/create-post', [PostController::class, "showCreateForm"])->name('create-post');
+Route::post('/create-post', [PostController::class, "storeNewPost"])->name('store-new-post');
