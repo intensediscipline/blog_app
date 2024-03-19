@@ -15,12 +15,13 @@ use App\Http\Controllers\UserController;
 |
 */
 
-Route::get('/', [UserController::class, "showCorrectHome"])->name('index');
-Route::post('/register', [UserController::class, "register"])->name('register');
-Route::post('/login', [UserController::class, "login"])->name('login');
-Route::post('/logout', [UserController::class, "logout"])->name('logout');
+// user related routes
+Route::get('/', [UserController::class, "showCorrectHome"])->name('login');
+Route::post('/register', [UserController::class, "register"])->middleware('guest');
+Route::post('/login', [UserController::class, "login"])->middleware('guest');
+Route::post('/logout', [UserController::class, "logout"])->middleware('mustBeLoggedIn');
 
 // post related routes
-Route::get('/create-post', [PostController::class, "showCreateForm"])->name('create-post');
-Route::post('/create-post', [PostController::class, "storeNewPost"])->name('store-new-post');
+Route::get('/create-post', [PostController::class, "showCreateForm"])->middleware('mustBeLoggedIn');
+Route::post('/create-post', [PostController::class, "storeNewPost"])->middleware('mustBeLoggedIn');
 Route::get('/post/{post}', [PostController::class, "showSinglePost"]);
