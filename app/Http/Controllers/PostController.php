@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class PostController extends Controller
 {
     public function showSinglePost(Post $post) {
-        $post['body'] = Str::markdown($post->body, '<p><ol><ul><em><strong><h1><h2><h3><br>');
+        $post['body'] = Str::markdown($post->body, ['<p><ol><ul><em><strong><h1><h2><h3><br>']);
         return view('single-post', ['post' => $post]);
     }
 
