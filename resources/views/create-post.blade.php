@@ -1,6 +1,6 @@
 <x-layout>
   <div class="container py-md-5 container--narrow">
-    <form action="/store-new-post" method="POST">
+    <form action="/create-post" method="POST">
       @csrf
       <div class="form-group">
         <label for="post-title" class="text-muted mb-1"><small>Title</small></label>
