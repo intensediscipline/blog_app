@@ -5,9 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class UserController extends Controller
 {
+    public function storeAvatar(Request $request) {
+        $request->validate([
+            'avatar' => 'required|image|max:3000'
+        ]);
+
+        $user = auth()->user();
+
+        $fileName = $user->id . "-" . uniqid() . ".jpg";
+
+        // bring in instance of image composer package
+        $manager = new ImageManager(new Driver());
+
+        $image = $manager->read($request->file('avatar'));
+
+        $imgData = $image->cover(120,120)->toJpeg();
+        
+        Storage::put("public/avatars/" . $fileName, $imgData);
+
+        return redirect("/profile/" . auth()->user()->username)->with('success', "Avatar successfully updated");
+    }
+
+    public function showAvatarForm() {
+        return view("avatar-form");
+    }
+
     public function profile(User $user) {
         // get all posts belonging to user
         // using a method posts on the user model
