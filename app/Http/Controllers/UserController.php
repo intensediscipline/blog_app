@@ -29,6 +29,17 @@ class UserController extends Controller
         
         Storage::put("public/avatars/" . $fileName, $imgData);
 
+        $oldAvatar = $user->avatar;
+
+        $user->avatar = $fileName;
+        // saves to db
+        $user->save();
+
+        // delete avatar if image is not fallback
+        if ($oldAvatar != "/fallback-avatar.jpg") {
+            Storage::delete(str_replace("/storage/", "public/", $oldAvatar));
+        }
+
         return redirect("/profile/" . auth()->user()->username)->with('success', "Avatar successfully updated");
     }
 
@@ -41,7 +52,7 @@ class UserController extends Controller
         // using a method posts on the user model
         $userPosts = $user->posts()->latest()->get();
         
-        return view('profile-posts', ['username' => $user->username, 'posts' => $userPosts]);
+        return view('profile-posts', ['username' => $user->username, 'posts' => $userPosts, 'avatar' => $user->avatar]);
     }
 
 
